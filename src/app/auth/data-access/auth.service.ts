@@ -1,23 +1,33 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { tap } from 'rxjs/operators'
 import { environment } from "../../../environments/environment";
+import { StorageService } from "../../shared/data-access/storage.service";
 
 @Injectable({
-  providedIn:'root'
+  providedIn: 'root'
 })
 
-export class AuthService{
-  constructor(private http : HttpClient){}
+export class AuthService {
+  private _http = inject(HttpClient);
+  private _storage = inject(StorageService)
 
   // crear user
-  signUp(email:string, password:string):Observable<any>{
-return this.http.post(`${environment.API_URL}/auth/sign-up`,{email,password})
+  signUp(email: string, password: string): Observable<any> {
+    return this._http.post(`${environment.API_URL}/auth/sign-up`, {
+      email,
+      password
+    }).pipe(
+      tap(response =>{
+        this._storage.set('session',JSON.stringify(response))
+      })
+    )
   }
 
   //iniciar sesion
-  logIn(){
+  logIn() {
 
   }
-
 }
+
