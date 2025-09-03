@@ -3,11 +3,14 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   // autenticacion
   {
-    path:'auth'
+    path:'auth',
+    loadChildren: ()=> import('./auth/features/shell/auth.routes')
   },
 
 
   {
-    path:'dashboard'
+    path:'dashboard',
+    loadComponent: () => import('./dashboard/dashboard')
+
   }
 ];
